@@ -1,35 +1,32 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-export default function CourseListRow({
-  isHeader,
-  textFirstCell,
-  textSecondCell,
-}) {
-  if (isHeader) {
+const CourseListRow = ({ isHeader, textFirstCell, textSecondCell }) => {
+  let tr = undefined;
+
+  if (isHeader === true) {
     if (textSecondCell === null) {
-      return (
-        <tr>
-          <th colSpan="2">{textFirstCell}</th>
-        </tr>
-      );
+      tr = <th colSpan='2'>{textFirstCell}</th>;
     } else {
-      return (
-        <tr>
+      tr = (
+        <Fragment>
           <th>{textFirstCell}</th>
           <th>{textSecondCell}</th>
-        </tr>
+        </Fragment>
       );
     }
-  } else {
-    return (
-      <tr>
+  }
+  if (isHeader === false) {
+    tr = (
+      <Fragment>
         <td>{textFirstCell}</td>
         <td>{textSecondCell}</td>
-      </tr>
+      </Fragment>
     );
   }
-}
+
+  return <tr>{tr}</tr>;
+};
 
 CourseListRow.defaultProps = {
   isHeader: false,
@@ -39,5 +36,7 @@ CourseListRow.defaultProps = {
 CourseListRow.propTypes = {
   isHeader: PropTypes.bool,
   textFirstCell: PropTypes.string.isRequired,
-  textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) 
+  textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
+
+export default CourseListRow;

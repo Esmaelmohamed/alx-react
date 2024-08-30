@@ -3,32 +3,38 @@ import { mount } from 'enzyme';
 import WithLogging from './WithLogging';
 import Login from '../Login/Login';
 
-
-describe('WithLogging', () => {
-
-  it('console.log called on mount', () => {
-
+describe('<WithLogging />', () => {
+  it('on mount and on unmount with Component when the wrapped element is pure html', () => {
     console.log = jest.fn();
-    const TestWithLogging = WithLogging(() => <p />);
-    const wrapper = mount(<TestWithLogging />);
-    expect(console.log).toHaveBeenCalledWith(`Component Component is mounted`);
+    const HOC = WithLogging(() => <p />);
+    const wrapper = mount(<HOC />);
+    expect(wrapper.exists()).toEqual(true);
+    expect(console.log).toHaveBeenNthCalledWith(
+      1,
+      `Component Component is mounted`
+    );
     wrapper.unmount();
-    expect(console.log).toHaveBeenCalledWith(
+    expect(console.log).toHaveBeenNthCalledWith(
+      2,
       `Component Component is going to unmount`
     );
-    expect(console.log).toHaveBeenCalledTimes(2);
+    jest.restoreAllMocks();
   });
 
-  it('correctly logs component name', () => {
-
+  it('mount and on unmount with the name of the component when the wrapped element is the Login component. ', () => {
     console.log = jest.fn();
-    const LoginWithLogging = WithLogging(Login);
-    const wrapper = mount(<LoginWithLogging />);
-    expect(console.log).toHaveBeenCalledWith(`Component Login is mounted`);
+    const HOC = WithLogging(Login);
+    const wrapper = mount(<HOC />);
+    expect(wrapper.exists()).toEqual(true);
+    expect(console.log).toHaveBeenNthCalledWith(
+      1,
+      `Component Login is mounted`
+    );
     wrapper.unmount();
-    expect(console.log).toHaveBeenCalledWith(
+    expect(console.log).toHaveBeenNthCalledWith(
+      2,
       `Component Login is going to unmount`
     );
-    expect(console.log).toHaveBeenCalledTimes(2);
+    jest.restoreAllMocks();
   });
 });
